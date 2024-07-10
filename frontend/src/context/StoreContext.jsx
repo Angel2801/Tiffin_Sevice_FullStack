@@ -1,6 +1,6 @@
 import { createContext, useEffect, useState } from "react";
 import { food_list } from "../assets/assets";
-import cart from "../pages/Cart/Cart";
+import Cart from "../pages/Cart/Cart";
 
 export const StoreContext = createContext(null);
 

@@ -10,7 +10,7 @@ const LoginPop = ({setShowLogin}) => {
           <h2>{currState}</h2>
           <img onClick={()=>setShowLogin(false)} src={assets.cross}></img>
         </div>
-        <div>
+        <div className='login-popup-inputs'>
           {currState==='Login'?<></>:<input type='text' placeholder='Your Name' required></input>}
           <input type='email' placeholder='Enter Your Email' required></input>
           <input type='password' placeholder='Enter Your Password' required></input>
@@ -23,8 +23,8 @@ const LoginPop = ({setShowLogin}) => {
           <p>By continuing, i agree the terms of use and privacy policy.</p>
         </div>
         {currState==='Login'?
-        <p>Create a new account?<span>Click Here</span></p>:
-        <p>Already have an account?<span>Login here</span></p>
+        <p>Create a new account?<span onClick={()=>setCurrState("Sign Up")}>Click Here</span></p>:
+        <p>Already have an account?<span onClick={()=>setCurrState("Login")}>Login here</span></p>
         }
       </form>
     </div>
