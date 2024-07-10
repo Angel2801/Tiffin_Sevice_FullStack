@@ -6,6 +6,7 @@
 }
 .navbar .logo{
     width:150px;
+    cursor: pointer;
 }
 .navbar-menu{
     display: flex;

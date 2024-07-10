@@ -1,6 +1,5 @@
-import { createContext, useEffect, useState } from "react";
+import React,{ createContext, useEffect, useState } from "react";
 import { food_list } from "../assets/assets";
-import Cart from "../pages/Cart/Cart";
 
 export const StoreContext = createContext(null);
 
@@ -20,12 +19,30 @@ const StoreContextProvider = (props) => {
     useEffect(()=>{
         console.log(cartItems);
     },[cartItems])
+    const getTotalCartAmount = () => {
+        let totalAmount = 0;
+        for (const item in cartItems) {
+            if (cartItems[item] > 0) {
+                // Convert item (key) to number for comparison
+                let itemId = Number(item);
+                let itemInfo = food_list.find((product) => product._id === itemId);
+                if (itemInfo) { // Check if itemInfo is defined
+                    totalAmount += itemInfo.price * cartItems[item];
+                } else {
+                    console.log(`Item with id ${itemId} not found`);
+                }
+            }
+        }
+        return totalAmount;
+    };
+
     const contextValue = {
         food_list,
         cartItems,
         addToCart,
         removeFromCart,
-        setCartItems
+        setCartItems,
+        getTotalCartAmount
     }
     return (
         <StoreContext.Provider value={contextValue}>
