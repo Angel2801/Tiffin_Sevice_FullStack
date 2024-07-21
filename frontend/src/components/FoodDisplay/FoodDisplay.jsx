@@ -3,20 +3,32 @@ import './FoodDisplay.css';
 import { StoreContext } from '../../context/StoreContext';
 import FoodItem from '../FoodItem/FoodItem';
 
-const FoodDisplay = ({category}) => {
-    const {food_list} = useContext(StoreContext);
+const FoodDisplay = () => {
+    const { food_list, selectedProvider } = useContext(StoreContext);
+
+    // Filter the food list based on selectedProvider
+    const filteredFoodList = selectedProvider === "All" 
+        ? food_list
+        : food_list.filter(item => item.provider === selectedProvider);
 
     return (
         <div className='food-display' id='food-display'>
             <h2>Top Services Near You</h2>
             <div className='food-display-list'>
-                {food_list.map((item,index)=>{{
-                    console.log(category,item.category);
-                }
-                    if(category==="All" || item.provider_name===category){
-                    return <FoodItem key={index} id={item._id} name={item.name} description={item.description} price={item.price} image={item.image}></FoodItem>
-                    }
-                })}
+                {filteredFoodList.length > 0 ? (
+                    filteredFoodList.map((item, index) => (
+                        <FoodItem
+                            key={index}
+                            id={item._id}
+                            name={item.itemName} // Ensure this matches your schema
+                            description={item.description}
+                            price={item.price}
+                            image={item.image}
+                        />
+                    ))
+                ) : (
+                    <p>No items available for this provider.</p>
+                )}
             </div>
         </div>
     );

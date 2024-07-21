@@ -1,54 +1,81 @@
-import React,{ createContext, useEffect, useState } from "react";
-import { food_list } from "../assets/assets";
+import React, { createContext, useEffect, useState } from "react";
+import axios from 'axios';
 
 export const StoreContext = createContext(null);
 
 const StoreContextProvider = (props) => {
-    const [cartItems,setCartItems]=useState({});
-    const addToCart=(itemId)=>{
-        if(!cartItems[itemId]){
-            setCartItems((prev=>({...prev,[itemId]:1})))
+    const [cartItems, setCartItems] = useState({});
+    const [token, setToken] = useState("");
+    const [food_list, setFoodList] = useState([]);
+    const url = "http://localhost:4000";
+
+    const fetchFoodList = async () => {
+        try {
+            const response = await axios.get(`${url}/api/menu   /list`);
+            console.log("Fetched food list:", response.data); // Log API response
+            if (response.data && response.data.data) {
+                setFoodList(response.data.data);
+            }
+        } catch (error) {
+            console.error("Error fetching food list:", error);
         }
-        else{
-            setCartItems((prev=>({...prev,[itemId]:prev[itemId]+1})));
+    };
+
+    useEffect(() => {
+        if (localStorage.getItem("token")) {
+            setToken(localStorage.getItem("token"));
         }
-    }
-    const removeFromCart=(itemId)=>{
-        setCartItems((prev=>({...prev,[itemId]:prev[itemId]-1})));
-    }
-    useEffect(()=>{
-        console.log(cartItems);
-    },[cartItems])
+
+        fetchFoodList();
+    }, []);
+
+    const addToCart = (itemId) => {
+        setCartItems(prev => ({
+            ...prev,
+            [itemId]: (prev[itemId] || 0) + 1
+        }));
+    };
+
+    const removeFromCart = (itemId) => {
+        setCartItems(prev => ({
+            ...prev,
+            [itemId]: prev[itemId] > 1 ? prev[itemId] - 1 : 0
+        }));
+    };
+
     const getTotalCartAmount = () => {
         let totalAmount = 0;
-        for (const item in cartItems) {
-            if (cartItems[item] > 0) {
-                // Convert item (key) to number for comparison
-                let itemId = Number(item);
-                let itemInfo = food_list.find((product) => product._id === itemId);
-                if (itemInfo) { // Check if itemInfo is defined
-                    totalAmount += itemInfo.price * cartItems[item];
-                } else {
-                    console.log(`Item with id ${itemId} not found`);
-                }
+        for (const itemId in cartItems) {
+            const item = food_list.find(product => product._id === itemId);
+            if (item) {
+                totalAmount += item.price * cartItems[itemId];
             }
         }
         return totalAmount;
     };
 
+    useEffect(()=>{
+        if(localStorage.getItem("token")){
+            setToken(localStorage.getItem("token"));
+        }
+    })
     const contextValue = {
         food_list,
         cartItems,
         addToCart,
         removeFromCart,
         setCartItems,
-        getTotalCartAmount
-    }
+        getTotalCartAmount,
+        url,
+        token,
+        setToken
+    };
+
     return (
         <StoreContext.Provider value={contextValue}>
             {props.children}
         </StoreContext.Provider>
-    )
-}
+    );
+};
 
 export default StoreContextProvider;

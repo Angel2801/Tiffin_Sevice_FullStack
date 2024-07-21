@@ -22,6 +22,9 @@ import linkden_icon from './linkden_icon.webp';
 import playstore from './playstore.png'
 import appstore from './appstore.png'
 import cross from './cross.png'
+import logout_icon from './logout_icon.webp'
+import bag_icon from './bag_icon.png'
+import profile_icon from './profile_image.jpeg'
 export const assets={
     img1,
     img2,
@@ -40,7 +43,10 @@ export const assets={
     linkden_icon,
     playstore,
     appstore,
-    cross
+    cross,
+    logout_icon,
+    bag_icon,
+    profile_icon
 };
 
 export const provider_list=[
