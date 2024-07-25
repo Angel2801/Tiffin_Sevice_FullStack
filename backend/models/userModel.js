@@ -19,12 +19,13 @@ const userSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    catData: {
-        type: Object,
+    cartData: {
+        type: Map,
+        of: Number,
         default: {}
     }
 }, { minimize: false });
 
-const userModel = mongoose.model("user", userSchema);
+const userModel = mongoose.model("User", userSchema);
 
 export default userModel;

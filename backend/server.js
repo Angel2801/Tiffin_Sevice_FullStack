@@ -5,6 +5,8 @@ import {connectDB} from './config/db.js'
 import menuRouter from './routes/menuRoute.js';
 import providerRouter from './routes/providerRoute.js'
 import userRouter from './routes/userRoute.js';
+import cartRouter from './routes/cartRoute.js';
+import orderRouter from './routes/orderRoute.js';
 
 //App Config
 const app=express();
@@ -20,6 +22,8 @@ app.use("/api/menu",menuRouter);
 app.use("/api/provider", providerRouter);  
 app.use("/api/user",userRouter);
 app.use("/images",express.static('uploads')); 
+app.use("/api/cart",cartRouter);
+app.use("/api/order",orderRouter);
 app.get("/",(req,resp)=>{
    resp.send("API Working")
 })
